@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz de Tempos Verbais</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 30px;
+      background-color: #f0f0f0;
+    }
+    #quiz-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 700px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    #question {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .options button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .options button:hover {
+      opacity: 0.9;
+    }
+    #feedback {
+      margin-top: 25px;
+      font-size: 20px;
+    }
+    #feedback em {
+      font-size: 24px;
+      display: block;
+      margin-top: 10px;
+      color: #333;
+    }
+    #nextBtn {
+      margin-top: 25px;
+      display: none;
+      padding: 12px 25px;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 10px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div id="quiz-container">
+    <h2>Adivinhe o tempo verbal</h2>
+    <p id="question"></p>
+    <div class="options" id="options"></div>
+    <div id="feedback"></div>
+    <button id="nextBtn" onclick="nextQuestion()">Próxima</button>
+  </div>
+
+  <script>
+    const questions = [
+      { sentence: "They like chocolate.", tense: "Simple Present", translation: "Eles gostam de chocolate." },
+      { sentence: "He is driving to work.", tense: "Present Continuous", translation: "Ele está dirigindo para o trabalho." },
+      { sentence: "She has visited Paris.", tense: "Present Perfect", translation: "Ela visitou Paris." },
+      { sentence: "We traveled to Spain.", tense: "Simple Past", translation: "Nós viajamos para a Espanha." },
+      { sentence: "We were eating dinner.", tense: "Past Continuous", translation: "Nós estávamos jantando." },
+{ sentence: "She studies every night.", tense: "Simple Present", translation: "Ela estuda todas as noites." },
+{ sentence: "I am learning French.", tense: "Present Continuous", translation: "Eu estou aprendendo francês." },
+{ sentence: "They have already seen this movie.", tense: "Present Perfect", translation: "Eles já viram esse filme." },
+{ sentence: "He walked to school yesterday.", tense: "Simple Past", translation: "Ele foi andando para a escola ontem." },
+{ sentence: "We were watching TV when it started to rain.", tense: "Past Continuous", translation: "Estávamos assistindo TV quando começou a chover." },
+{ sentence: "She had already left when I arrived.", tense: "Past Perfect", translation: "Ela já tinha saído quando eu cheguei." },
+{ sentence: "I will travel to Japan next year.", tense: "Future (will)", translation: "Eu viajarei para o Japão no próximo ano." },
+{ sentence: "They are going to paint the house.", tense: "Future (going to)", translation: "Eles vão pintar a casa." },
+{ sentence: "I have been reading a lot lately.", tense: "Present Perfect Continuous", translation: "Tenho lido bastante ultimamente." },
+{ sentence: "He will have graduated by June.", tense: "Future Perfect", translation: "Ele terá se formado até junho." },
+{ sentence: "Do you like pizza?", tense: "Simple Present", translation: "Você gosta de pizza?" },
+
+{ sentence: "I am not feeling well today.", tense: "Present Continuous", translation: "Eu não estou me sentindo bem hoje." },
+{ sentence: "They have finished their homework.", tense: "Present Perfect", translation: "Eles terminaram a lição de casa." },
+{ sentence: "She watched a documentary last night.", tense: "Simple Past", translation: "Ela assistiu a um documentário ontem à noite." },
+{ sentence: "I was driving when the phone rang.", tense: "Past Continuous", translation: "Eu estava dirigindo quando o telefone tocou." },
+{ sentence: "He had written the letter before leaving.", tense: "Past Perfect", translation: "Ele tinha escrito a carta antes de sair." },
+{ sentence: "I will help you with that.", tense: "Future (will)", translation: "Eu te ajudarei com isso." },
+{ sentence: "She is going to start studying English tomorrow.", tense: "Future (going to)", translation: "Ela vai começar a estudar inglês amanhã." },
+{ sentence: "They have been waiting for hours.", tense: "Present Perfect Continuous", translation: "Eles estão esperando há horas." },
+{ sentence: "We will have already eaten by 8 PM.", tense: "Future Perfect", translation: "Nós já teremos comido até as 8 da noite." },
+{ sentence: "He drinks coffee every morning.", tense: "Simple Present", translation: "Ele toma café toda manhã." },
+{ sentence: "I am working on a new project.", tense: "Present Continuous", translation: "Estou trabalhando em um novo projeto." },
+{ sentence: "They played soccer yesterday.", tense: "Simple Past", translation: "Eles jogaram futebol ontem." },
+{ sentence: "I was sleeping when you called.", tense: "Past Continuous", translation: "Eu estava dormindo quando você ligou." },
+{ sentence: "They had lost the keys before they found them.", tense: "Past Perfect", translation: "Eles tinham perdido as chaves antes de encontrá-las." },
+{ sentence: "We will arrive at noon.", tense: "Future (will)", translation: "Nós chegaremos ao meio-dia." },
+{ sentence: "He is going to take the test tomorrow.", tense: "Future (going to)", translation: "Ele vai fazer a prova amanhã." },
+{ sentence: "I have been feeling tired lately.", tense: "Present Perfect Continuous", translation: "Tenho me sentido cansado ultimamente." },
+{ sentence: "By next month, she will have completed the course.", tense: "Future Perfect", translation: "Até o próximo mês, ela terá concluído o curso." },
+{ sentence: "She always reads before bed.", tense: "Simple Present", translation: "Ela sempre lê antes de dormir." },
+ { sentence: "She will be reading before bed.", tense: "Future Continuous", translation: "Ela estará lendo antes de dormir." },
+{ sentence: "We visited grandma last weekend.", tense: "Simple Past", translation: "Nós visitamos a vovó no fim de semana passado." },
+{ sentence: "I was watching a movie when you arrived.", tense: "Past Continuous", translation: "Eu estava assistindo a um filme quando você chegou." },
+{ sentence: "She had prepared dinner before I got home.", tense: "Past Perfect", translation: "Ela tinha preparado o jantar antes de eu chegar em casa." },
+{ sentence: "He will join us later.", tense: "Future (will)", translation: "Ele vai se juntar a nós mais tarde." },
+{ sentence: "I am going to buy new shoes.", tense: "Future (going to)", translation: "Eu vou comprar calçados novos." },
+{ sentence: "We have been talking for an hour.", tense: "Present Perfect Continuous", translation: "Estamos conversando há uma hora." },
+{ sentence: "They will have arrived by the time we leave.", tense: "Future Perfect", translation: "Eles terão chegado quando formos embora." },
+{ sentence: "She writes poems.", tense: "Simple Present", translation: "Ela escreve poemas." },
+{ sentence: "I am reading a great book.", tense: "Present Continuous", translation: "Eu estou lendo um ótimo livro." },
+{ sentence: "He has never been to Italy.", tense: "Present Perfect", translation: "Ele nunca esteve na Itália." },
+{ sentence: "They danced all night.", tense: "Simple Past", translation: "Eles dançaram a noite toda." },
+{ sentence: "We were cleaning the house.", tense: "Past Continuous", translation: "Nós estávamos limpando a casa." },
+{ sentence: "I had never seen snow before.", tense: "Past Perfect", translation: "Eu nunca tinha visto neve antes." },
+{ sentence: "I will meet you at the restaurant.", tense: "Future (will)", translation: "Eu te encontrarei no restaurante." },
+{ sentence: "They are going to build a house.", tense: "Future (going to)", translation: "Eles vão construir uma casa." },
+{ sentence: "She has been working here since last year.", tense: "Present Perfect Continuous", translation: "Ela está trabalhando aqui desde o ano passado." },
+// 
+
+      { sentence: "I had finished the test before the bell rang.", tense: "Past Perfect", translation: "Eu tinha terminado a prova antes do sinal tocar." },
+      { sentence: "I will call you later.", tense: "Future (will)", translation: "Eu te ligarei mais tarde." },
+      { sentence: "He is going to cook dinner.", tense: "Future (going to)", translation: "Ele vai cozinhar o jantar." },
+      { sentence: "They have been working all day.", tense: "Present Perfect Continuous", translation: "Eles estão trabalhando o dia todo." },
+      { sentence: "I will have finished by tomorrow.", tense: "Future Perfect", translation: "Eu terei terminado até amanhã." }
+    ];
+
+    const tenses = [
+      "Simple Present",
+      "Present Continuous",
+      "Present Perfect",
+      "Present Perfect Continuous",
+      "Simple Past",
+      "Past Continuous",
+      "Past Perfect",
+      "Future (will)",
+      "Future (going to)",
+      "Future Perfect",
+      "Future Continuous"
+    ];
+
+    const colors = [
+      "#FFCDD2", "#F8BBD0", "#E1BEE7", "#D1C4E9", "#BBDEFB",
+      "#B2EBF2", "#C8E6C9", "#FFF9C4", "#FFE0B2", "#D7CCC8"
+    ];
+
+    let currentIndex = 0;
+
+    function showQuestion() {
+      const q = questions[currentIndex];
+      document.getElementById('question').textContent = q.sentence;
+      const optionsDiv = document.getElementById('options');
+      const feedback = document.getElementById('feedback');
+      feedback.innerHTML = '';
+      document.getElementById('nextBtn').style.display = 'none';
+      optionsDiv.innerHTML = '';
+
+      tenses.forEach((tense, index) => {
+        const btn = document.createElement('button');
+        btn.textContent = `${index + 1}. ${tense}`;
+        btn.style.backgroundColor = colors[index % colors.length];
+        btn.onclick = () => checkAnswer(tense);
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected) {
+      const q = questions[currentIndex];
+      const feedback = document.getElementById('feedback');
+      if (selected === q.tense) {
+        feedback.innerHTML = `<span style="color:green;">✅ Correto!</span><em>${q.translation}</em>`;
+      } else {
+        feedback.innerHTML = `<span style="color:red;">❌ Errado. Correto: ${q.tense}</span><em>${q.translation}</em>`;
+      }
+      document.querySelectorAll('.options button').forEach(btn => btn.disabled = true);
+      document.getElementById('nextBtn').style.display = 'inline-block';
+    }
+
+    function nextQuestion() {
+      currentIndex++;
+      if (currentIndex < questions.length) {
+        showQuestion();
+      } else {
+        document.getElementById('question').textContent = "🎉 Quiz finalizado!";
+        document.getElementById('options').innerHTML = '';
+        document.getElementById('feedback').textContent = '';
+        document.getElementById('nextBtn').style.display = 'none';
+      }
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
